@@ -1,11 +1,9 @@
 # Emotional Music Synthesiser
-
-The Emotional Music Synthesizer project is an innovative endeavour to merge artificial intelligence and music creation, leveraging Long Short-Term Memory (LSTM) networks to generate music that resonates with various emotional states. This project is grounded in advanced deep-learning methodologies and utilizes an extensive collection of MIDI files as its dataset, aiming to produce a wide array of musical compositions. By integrating emotional cues or parameters specified by the user, the Emotional Music Synthesizer seeks to tailor its output, creating music that not only captivates but also reflects the nuanced spectrum of human emotions.
-
-
 ## Introduction
 
-At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an RNN model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
+Emotional Music Synthesizer is a Deep Learning model leveraging Long Short-Term Memory (LSTM) networks to generate classical music that resonates with the listener's emotional states.
+## Dataset
+At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
 
 ## Machine Learning Models and Techniques
 
