@@ -26,9 +26,8 @@ After setting up the environment and datasets, users can train their model using
 
 ## Authors and Acknowledgements
 
-The Music Generator project is a collaborative effort, aiming to push the boundaries of AI in creative domains. It represents a synthesis of music theory, machine learning, and software development, showcasing the potential of AI to innovate in the arts.
-
 We're a group of three Applied Computer Science and Artificial Intelligence students at Sapienza University of Rome, this is a project that we have undertaken as part of our Deep Learning Exam.
+
 For any clarifications or further information, please feel free to contact us.
 
 ## License
