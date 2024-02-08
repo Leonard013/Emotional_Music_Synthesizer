@@ -13,6 +13,8 @@ At the heart of the Music Generator project is the goal to automate music compos
 <p align="center">
   <img src="model architecture.jpg" width="480px" />
 </p>
+
+
 ## Installation
 
 To replicate the Music Generator system, users will need to set up a Python environment and download the required datasets. The project utilizes libraries such as `pretty_midi` for MIDI file manipulation and `tensorflow` for model training and inference.
@@ -21,13 +23,13 @@ To replicate the Music Generator system, users will need to set up a Python envi
 
 After setting up the environment and datasets, users can train their model using the provided scripts. The training process involves parsing MIDI files to extract musical notes, training the RNN model on this data, and then using the model to generate new music based on initial note sequences.
 
-## Visualization and Interaction
-
-The project includes functionalities to visualize the generated music, converting MIDI sequences back into a more interpretable format. Additionally, it explores the impact of different initial conditions or parameters on the generated music, offering users a way to interact with and influence the composition process.
 
 ## Authors and Acknowledgements
 
 The Music Generator project is a collaborative effort, aiming to push the boundaries of AI in creative domains. It represents a synthesis of music theory, machine learning, and software development, showcasing the potential of AI to innovate in the arts.
+
+We're a group of three Applied Computer Science and Artificial Intelligence students at Sapienza University of Rome, this is a project that we have undertaken as part of our Deep Learning Exam.
+For any clarifications or further information, please feel free to contact us.
 
 ## License
 
