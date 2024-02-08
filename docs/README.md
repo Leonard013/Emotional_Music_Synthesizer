@@ -7,12 +7,24 @@ The Emotional Music Synthesizer project is an innovative endeavour to merge arti
 
 At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an RNN model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
 
-## Machine Learning Models and Techniques
-
-- **Recurrent Neural Networks (RNNs)**: The core technology behind the music generation, capable of learning sequences and patterns in the musical data.
-- **Data Preprocessing**: Techniques for extracting musical elements from MIDI files, such as pitch, step, and duration, which serve as inputs for the model.
-
+## Deep Learning Models and Techniques
+- **Voice Recording/Music File**: initial input file the model will begin the output track with.
+- **Features Extractor**: face and emotion recognition given a picture of the user's face.
+- **Emotion Score**: Kmeans-based predictor trained to classify songs by emotion.
+- **LSTM Networks**: main part, predicts new notes according to the previous ones.
+- **Emotion Encloser**: incorporates emotion score to predict the new note.
+- **List of Notes**: output list of notes.
 <img src="model architecture.jpg" width="480px" />
+
+## Approach
+- The model takes as first input a voice recording or a music file and extracts the notes from it and an image of the user from which it derives the label belonging to {-1, 1} according to the emotion
+Each note is a triple (pitch, step, duration) where pitch is the "tone" of the note, step is the distance from the previous one and duration is how much the note lasts.
+- The window of notes (which will change over time after every prediction) is given to the lstm and its output to 3 different FFNN to predict pitch, step and duration as following:
+**pitch** (categorical cross entropy loss) outputs logits for each possible note (128)
+**step** (non-negative mse) predicts the most probable step
+**duration** (non-negative mse) predicts the most probable duration
+- Each obtained value is affected by the emotion score defined as:
+  $\text{emotion score}(x_i,l) = \frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$
 
 ## Installation
 
