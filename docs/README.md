@@ -12,6 +12,8 @@ At the heart of the Music Generator project is the goal to automate music compos
 - **Recurrent Neural Networks (RNNs)**: The core technology behind the music generation, capable of learning sequences and patterns in the musical data.
 - **Data Preprocessing**: Techniques for extracting musical elements from MIDI files, such as pitch, step, and duration, which serve as inputs for the model.
 
+<img src="model architecture.jpg" width="480px" style="transform:rotate(90deg)" />
+
 ## Installation
 
 To replicate the Music Generator system, users will need to set up a Python environment and download the required datasets. The project utilizes libraries such as `pretty_midi` for MIDI file manipulation and `tensorflow` for model training and inference.
@@ -31,3 +33,4 @@ The Music Generator project is a collaborative effort, aiming to push the bounda
 ## License
 
 The project is open-source, encouraging further experimentation and development in the field of AI-generated music. It exemplifies the collaborative spirit of the AI and music communities, inviting contributions and improvements.
+
