@@ -12,7 +12,7 @@ At the heart of the Music Generator project is the goal to automate music compos
 - **Recurrent Neural Networks (RNNs)**: The core technology behind the music generation, capable of learning sequences and patterns in the musical data.
 - **Data Preprocessing**: Techniques for extracting musical elements from MIDI files, such as pitch, step, and duration, which serve as inputs for the model.
 
-<img src="model architecture.jpg" width="480px" style="transform:rotate(90deg)" />
+<img src="model architecture.jpg" width="480px"/>
 
 ## Installation
 
