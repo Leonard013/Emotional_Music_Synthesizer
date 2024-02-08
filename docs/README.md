@@ -32,5 +32,5 @@ For any clarifications or further information, please feel free to contact us.
 
 ## License
 
-The project is open-source, encouraging further experimentation and development in the field of AI-generated music. It exemplifies the collaborative spirit of the AI and music communities, inviting contributions and improvements.
+The project is open-source, encouraging further experimentation and development in the field of AI generative models.
 
