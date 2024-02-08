@@ -1,11 +1,10 @@
 # Emotional Music Synthesiser
-
-The Emotional Music Synthesizer project is an innovative endeavour to merge artificial intelligence and music creation, leveraging Long Short-Term Memory (LSTM) networks to generate music that resonates with various emotional states. This project is grounded in advanced deep-learning methodologies and utilizes an extensive collection of MIDI files as its dataset, aiming to produce a wide array of musical compositions. By integrating emotional cues or parameters specified by the user, the Emotional Music Synthesizer seeks to tailor its output, creating music that not only captivates but also reflects the nuanced spectrum of human emotions.
-
-
 ## Introduction
 
-At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an RNN model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
+Emotional Music Synthesizer is a Deep Learning model leveraging Long Short-Term Memory (LSTM) networks to generate classical music that resonates with the listener's emotional states.
+## Dataset
+At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
+
 
 ## Deep Learning Models and Techniques
 - **Voice Recording/Music File**: initial input file the model will begin the output track with.
@@ -14,7 +13,9 @@ At the heart of the Music Generator project is the goal to automate music compos
 - **LSTM Networks**: main part, predicts new notes according to the previous ones.
 - **Emotion Encloser**: incorporates emotion score to predict the new note.
 - **List of Notes**: output list of notes.
-<img src="model architecture.jpg" width="480px" />
+<p align="center">
+  <img src="model architecture.jpg" width="480px" />
+</p>
 
 ## Approach
 - The model takes as first input a voice recording or a music file and extracts the notes from it and an image of the user from which it derives the label belonging to {-1, 1} according to the emotion
@@ -34,15 +35,14 @@ To replicate the Music Generator system, users will need to set up a Python envi
 
 After setting up the environment and datasets, users can train their model using the provided scripts. The training process involves parsing MIDI files to extract musical notes, training the RNN model on this data, and then using the model to generate new music based on initial note sequences.
 
-## Visualization and Interaction
-
-The project includes functionalities to visualize the generated music, converting MIDI sequences back into a more interpretable format. Additionally, it explores the impact of different initial conditions or parameters on the generated music, offering users a way to interact with and influence the composition process.
 
 ## Authors and Acknowledgements
 
-The Music Generator project is a collaborative effort, aiming to push the boundaries of AI in creative domains. It represents a synthesis of music theory, machine learning, and software development, showcasing the potential of AI to innovate in the arts.
+We're a group of three Applied Computer Science and Artificial Intelligence students at Sapienza University of Rome, this is a project that we have undertaken as part of our Deep Learning Exam.
+
+For any clarifications or further information, please feel free to contact us.
 
 ## License
 
-The project is open-source, encouraging further experimentation and development in the field of AI-generated music. It exemplifies the collaborative spirit of the AI and music communities, inviting contributions and improvements.
+The project is open-source, encouraging further experimentation and development in the field of AI generative models.
 
