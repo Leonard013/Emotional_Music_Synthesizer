@@ -1,6 +1,7 @@
 # Emotional Music Synthetiser
 
-The Emotional Music Synthetiser is designed to explore the intersection of artificial intelligence and music, creating a system that generates musical compositions using Recurrent Neural Networks (RNNs). Leveraging deep learning algorithms and datasets of MIDI files, the project aims to produce music that can vary based on user-defined parameters or inputs.
+The Emotional Music Synthesizer project is an innovative endeavour to merge artificial intelligence and music creation, leveraging Long Short-Term Memory (LSTM) networks to generate music that resonates with various emotional states. This project is grounded in advanced deep-learning methodologies and utilizes an extensive collection of MIDI files as its dataset, aiming to produce a wide array of musical compositions. By integrating emotional cues or parameters specified by the user, the Emotional Music Synthesizer seeks to tailor its output, creating music that not only captivates but also reflects the nuanced spectrum of human emotions.
+
 
 ## Introduction
 
