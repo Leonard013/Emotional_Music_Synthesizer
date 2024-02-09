@@ -1,4 +1,4 @@
-# Emotional Music Synthesiser
+# Emotional Music Synthesizer
 ## Introduction
 
 Emotional Music Synthesizer is a Deep Learning model leveraging Long Short-Term Memory (LSTM) networks to generate classical music that resonates with the listener's emotional states.
@@ -19,7 +19,7 @@ At the heart of the Music Generator project is the goal to automate music compos
 
 ## Approach
 - The model takes as first input a voice recording or a music file and extracts the notes from it and an image of the user from which it derives the label belonging to {-1, 1} according to the emotion                      
-Each note is a triple (pitch, step, duration) where pitch is the "tone" of the note, step is the distance from the previous one and duration is how much the note lasts.
+Each note is a triple (pitch, step, duration) where pitch is the "tone" of the note, step is the time elapsed from the previous one's start and duration is how much the note lasts.
 - The window of notes (which will change over time after every prediction) is given to the lstm and its output to 3 different FFNN to predict pitch, step and duration as following:                                           
 **pitch** (categorical cross entropy loss) outputs logits for each possible note (128)                
 **step** (non-negative mse) predicts the most probable step                              
@@ -33,7 +33,7 @@ In this way the score of a point is higher if it is closer to the correct emotio
 <h3> $$logits  = \frac{\alpha \cdot emotion\_score + \beta \cdot logits}{temperature}$$ </h3>
 with $\alpha = \beta = 0.5$ and $temperature = 2$ <br />
 Finally a note is sampled according to the probabilty deriving from the normalization of latter scores <br />
-For step and duration instead we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
+For step and duration, instead, we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
 <h3> $$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$ </h3>
 where
 <h3> $\mu_{step} = \mu_{duration} = 1$ </h3>
