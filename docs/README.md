@@ -18,15 +18,28 @@ At the heart of the Music Generator project is the goal to automate music compos
 </p>
 
 ## Approach
-- The model takes as first input a voice recording or a music file and extracts the notes from it and an image of the user from which it derives the label belonging to {-1, 1} according to the emotion
+- The model takes as first input a voice recording or a music file and extracts the notes from it and an image of the user from which it derives the label belonging to {-1, 1} according to the emotion                      
 Each note is a triple (pitch, step, duration) where pitch is the "tone" of the note, step is the distance from the previous one and duration is how much the note lasts.
-- The window of notes (which will change over time after every prediction) is given to the lstm and its output to 3 different FFNN to predict pitch, step and duration as following:
-**pitch** (categorical cross entropy loss) outputs logits for each possible note (128)
-**step** (non-negative mse) predicts the most probable step
-**duration** (non-negative mse) predicts the most probable duration
+- The window of notes (which will change over time after every prediction) is given to the lstm and its output to 3 different FFNN to predict pitch, step and duration as following:                                           
+**pitch** (categorical cross entropy loss) outputs logits for each possible note (128)                
+**step** (non-negative mse) predicts the most probable step                              
+**duration** (non-negative mse) predicts the most probable duration                        
 - Each obtained value is affected by the emotion score defined as:
-  $\text{emotion score}(x_i,l) = \frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$
-
+  $$\text{emotion score}(x_i,l) = 1-\frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$$
+where:
+$l$ is the detected emotion
+$\mu_l$ is the cluster corresponding to the detected emotion
+In this way the score of a point is higher if it is closer to the correct emotion cluster and pitch logits are modified:
+$$logits  = \alpha \cdot emotion\_score + \beta \cdot logits$$
+with $\alpha = \beta = 0.5$     
+Finally a note is sampled according to the probabilty deriving from the normalization of latter scores
+For step and duration instead we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
+$$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$
+then:
+$$step = step_{pred} \cdot ( 1- l \cdot  \gamma)$$ $$duration = duration_{pred} \cdot ( 1- l \cdot  \delta)$$
+where:
+$step_{pred}$ and $duration_{pred}$ are the step and duration from the the FFNN
+ 
 ## Installation
 
 To replicate the Music Generator system, users will need to set up a Python environment and download the required datasets. The project utilizes libraries such as `pretty_midi` for MIDI file manipulation and `tensorflow` for model training and inference.
