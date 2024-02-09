@@ -2,9 +2,14 @@
 ## Introduction
 
 Emotional Music Synthesizer is a Deep Learning model leveraging Long Short-Term Memory (LSTM) networks to generate classical music that resonates with the listener's emotional states.
+
 ## Dataset
 At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
 
+## Quick Start
+
+This software is intended for execution on Colab, ensuring accessibility to all users, regardless of the power of their machine.
+The model begins by recording the listener's voice, which initiates the composition process. Then, it captures a photo of the listener, and based on their emotional state, it adjusts the melody to either a happier or sadder tone. Initially, our intention was for the model to modify the composition in real time, reacting to the listener's changing emotions. However, due to the limitations of our computer's performance, we opted to base the composition on a single captured emotion instead.
 
 ## Deep Learning Models and Techniques
 - **Voice Recording/Music File**: initial input file the model will begin the output track with.
@@ -44,15 +49,6 @@ Finally:
 <h3> $$step = step_{pred} \cdot ( 1- l \cdot  \gamma)$$ $$duration = duration_{pred} \cdot ( 1- l \cdot  \delta)$$ </h3>
 where:
 $step_{pred}$ and $duration_{pred}$ are the step and duration from the the FFNN and $l \in$ { -1, 1 }
- 
-## Installation
-
-To replicate the Music Generator system, users will need to set up a Python environment and download the required datasets. The project utilizes libraries such as `pretty_midi` for MIDI file manipulation and `tensorflow` for model training and inference.
-
-## Quick Start
-
-After setting up the environment and datasets, users can train their model using the provided scripts. The training process involves parsing MIDI files to extract musical notes, training the RNN model on this data, and then using the model to generate new music based on initial note sequences.
-
 
 ## Authors and Acknowledgements
 
