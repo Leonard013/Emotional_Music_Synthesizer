@@ -25,23 +25,23 @@ Each note is a triple (pitch, step, duration) where pitch is the "tone" of the n
 **step** (non-negative mse) predicts the most probable step                              
 **duration** (non-negative mse) predicts the most probable duration                        
 - Each obtained value is affected by the emotion score defined as:
-###  $$\text{emotion score}(x_i,l) = 1-\frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$$
+<h3>  $$\text{emotion score}(x_i,l) = 1-\frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$$  </h3>
 where:
 $l$ is the detected emotion <br />
 $\mu_l$ is the cluster corresponding to the detected emotion <br />
 In this way the score of a point is higher if it is closer to the correct emotion cluster and pitch logits are modified, we also decided to add some controlled randomness so to not incur into expectable and repeated sequences. 
-### $$logits  = \frac{\alpha \cdot emotion\_score + \beta \cdot logits}{temperature}$$
+<h3> $$logits  = \frac{\alpha \cdot emotion\_score + \beta \cdot logits}{temperature}$$ </h3>
 with $\alpha = \beta = 0.5$ and $temperature = 2$ <br />
 Finally a note is sampled according to the probabilty deriving from the normalization of latter scores <br />
 For step and duration instead we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
-### $$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$
+<h3> $$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$ </h3>
 where
-### $\mu_{step} = \mu_{duration} = 1$
-### $\sigma_{step} = \sigma_{duration} = 0.1$
+<h3> $\mu_{step} = \mu_{duration} = 1$ </h3>
+<h3> $\sigma_{step} = \sigma_{duration} = 0.1$ </h3>
 then:
-### $$\gamma = 1-|\gamma|$$ $$\delta = 1-|\delta|$$
+<h3> $$\gamma = 1-|\gamma|$$ $$\delta = 1-|\delta|$$ </h3>
 Finally:
-### $$step = step_{pred} \cdot ( 1- l \cdot  \gamma)$$ $$duration = duration_{pred} \cdot ( 1- l \cdot  \delta)$$
+<h3> $$step = step_{pred} \cdot ( 1- l \cdot  \gamma)$$ $$duration = duration_{pred} \cdot ( 1- l \cdot  \delta)$$ </h3>
 where:
 $step_{pred}$ and $duration_{pred}$ are the step and duration from the the FFNN and $l \in$ { -1, 1 }
  
