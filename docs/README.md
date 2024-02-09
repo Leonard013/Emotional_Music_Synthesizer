@@ -31,7 +31,7 @@ $l$ is the detected emotion <br />
 $\mu_l$ is the cluster corresponding to the detected emotion <br />
 In this way the score of a point is higher if it is closer to the correct emotion cluster and pitch logits are modified, we also decided to add some controlled randomness so to not incur into expectable and repeated sequences. 
 $$logits  = \frac{\alpha \cdot emotion\_score + \beta \cdot logits}{temperature}$$
-with $\alpha = \beta = 0.5$ <br />
+with $\alpha = \beta = 0.5$ and $temperature = 2$ <br />
 Finally a note is sampled according to the probabilty deriving from the normalization of latter scores <br />
 For step and duration instead we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
 $$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$
