@@ -3,15 +3,15 @@
 
 Emotional Music Synthesizer is a Deep Learning model leveraging Long Short-Term Memory (LSTM) networks to generate classical music that resonates with the listener's emotional states.
 <br>
-This software is intended for execution on Colab, ensuring accessibility to all users, regardless of the power of their machine.
+This software is intended for execution on Colab, ensuring accessibility to all users, regardless of the power of their machine and avoiding compatibility problems among the used libraries.
 The model begins by recording the listener's voice, which initiates the composition process. Then, it captures a photo of the listener, and based on their emotional state, it adjusts the melody to either a happier or sadder tone. Initially, our intention was for the model to modify the composition in real time, reacting to the listener's changing emotions. However, due to the limitations of our computer's performance, we opted to base the composition on a single captured emotion instead.
 
 ## Dataset
-At the heart of the Music Generator project is the goal to automate music composition, making it accessible to individuals without formal musical training. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
+The goal of the Music Generator project is to automate music composition, making it either accessible to individuals without formal musical training or as a helpful tool for more expert people. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
 
 ## Quick Start
-
-Spiegazione Tecnica
+To run the program it is necessary to run the colab notebook "Emotional_music_synthesizer.ipynb" in which step by step the whole generation process is illustrated. <br/>
+Before running the file it is required to add to colab's directory file "shape_predictor_68_face_landmarks.dat" (face feature descriptor), "model.pkl" (k-means model) and "music_generator.h5" (music generator weights).
 
 ## Deep Learning Models and Techniques
 - **Voice Recording/Music File**: initial input file the model will begin the output track with.
