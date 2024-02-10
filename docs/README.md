@@ -34,23 +34,23 @@ Each note is a triple (pitch, step, duration) where pitch is the "tone" of the n
 - Each obtained value is affected by the emotion score defined as:
 <h3>  $$\text{emotion score}(x_i,l) = 1-\frac{e^{||x_i - \mu_l||}}{\sum_{j=1}^{2} e^{||x_j-\mu_l||}}$$  </h3>
 where:
-$l$ is the detected emotion <br />
-$\mu_l$ is the cluster corresponding to the detected emotion <br />
+<p>$l$ is the detected emotion</p> <br />
+<p>$\mu_l$ is the cluster corresponding to the detected emotion </p><br/>
 In this way the score of a point is higher if it is closer to the correct emotion cluster and pitch logits are modified, we also decided to add some controlled randomness so to not incur into expectable and repeated sequences. 
 <h3> $$logits  = \frac{\alpha \cdot emotion\_score + \beta \cdot logits}{temperature}$$ </h3>
-with $\alpha = \beta = 0.5$ and $temperature = 2$ <br />
+<p>with $\alpha = 0.65$ and $\beta = 0.35$ and $temperature = 2$</p> <br/>
 Finally a note is sampled according to the probabilty deriving from the normalization of latter scores <br />
 For step and duration, instead, we empirically noticed that this 2 values are commonly higher in songs labeled as "sad" and lower in the "happy" therefore we decided to sample 2 parameters $\gamma$ and $\delta$ from 2 normal distribution
 <h3> $$\mathbb{P}(\Gamma = \gamma) = N(\mu_{step}, \sigma_{step})$$ $$\mathbb{P}(\Delta = \delta) = N(\mu_{duration}, \sigma_{duration})$$ </h3>
 where
 <h3> $\mu_{step} = \mu_{duration} = 1$ </h3>
-<h3> $\sigma_{step} = \sigma_{duration} = 0.1$ </h3>
+<h3> $\sigma_{step} = 0.12$ and $\sigma_{duration} = 0.1$ </h3>
 then:
 <h3> $$\gamma = 1-|\gamma|$$ $$\delta = 1-|\delta|$$ </h3>
 Finally:
 <h3> $$step = step_{pred} \cdot ( 1- l \cdot  \gamma)$$ $$duration = duration_{pred} \cdot ( 1- l \cdot  \delta)$$ </h3>
 where:
-$step_{pred}$ and $duration_{pred}$ are the step and duration from the the FFNN and $l \in$ { -1, 1 }
+<p>$step_{pred}$ and $duration_{pred}$ are the step and duration from the the FFNN and $l \in$ { -1, 1 }</p>
 
 ## Authors and Acknowledgements
 
