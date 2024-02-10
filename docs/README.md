@@ -12,6 +12,8 @@ The goal of the Music Generator project is to automate music composition, making
 ## Quick Start
 To run the program it is necessary to run the colab notebook "Emotional_music_synthesizer.ipynb" in which step by step the whole generation process is illustrated. <br/>
 Before running the file it is required to add to colab's directory file "shape_predictor_68_face_landmarks.dat" (face feature descriptor), "model.pkl" (k-means model) and "music_generator.h5" (music generator weights).
+Due to the difficulty of finding stable, working libraries for the voice recording to use in GoogleColab, there might be difficulties in recording the initial audio. We suggest you to make it hear a recorded audio, or to speak very loud.
+Also the fluisynth library is sometimes faulty in reproducing the MIDI files, but they can be easily downloaded from the working directory for playback.
 
 ## Deep Learning Models and Techniques
 - **Voice Recording/Music File**: initial input file the model will begin the output track with.
@@ -62,3 +64,21 @@ For any clarifications or further information, please feel free to contact us.
 
 The project is open-source, encouraging further experimentation and development in the field of AI generative models.
 
+## Citations
+
+@article{ferreira_ismir_2019,
+  title={Learning to Generate Music with Sentiment},
+  author={Ferreira, Lucas N. and Whitehead, Jim},
+  booktitle = {Proceedings of the Conference of the International Society for Music Information Retrieval},
+  series = {ISMIR'19},
+  year={2019},
+}
+
+@inproceedings{
+  hawthorne2018enabling,
+  title={Enabling Factorized Piano Music Modeling and Generation with the {MAESTRO} Dataset},
+  author={Curtis Hawthorne and Andriy Stasyuk and Adam Roberts and Ian Simon and Cheng-Zhi Anna Huang and Sander Dieleman and Erich Elsen and Jesse Engel and Douglas Eck},
+  booktitle={International Conference on Learning Representations},
+  year={2019},
+  url={https://openreview.net/forum?id=r1lYRjC9F7},
+}
