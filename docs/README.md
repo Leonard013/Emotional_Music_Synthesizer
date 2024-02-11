@@ -8,19 +8,19 @@ The model begins by recording the listener's voice, which initiates the composit
 
 ## Dataset and Training
 The goal of the Music Generator project is to automate music composition, making it either accessible to individuals without formal musical training or as a helpful tool for more expert people. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
-The model has already been trained and it is possible to import the weights or start a new training, surely with a longer training the model will perform better but due to our computational power limitations (and colab limited gpu load time) we had to reduce it. The training is done running 50 epochs for 100 music files.
+The model has already been trained and it is possible to import the weights or start a new training, surely with a longer training the model will perform better but due to our computational power limitations (and colab limited gpu load time) we had to reduce it. The training is done running 50 epochs for 500 music files.
 
 ## Quick Start
 To run the program it is necessary to run the colab notebook "Emotional_music_synthesizer.ipynb" in which step by step the whole generation process is illustrated. <br/>
 Before running the file it is required to add to colab's directory file "shape_predictor_68_face_landmarks.dat" (face feature descriptor), "model.pkl" (k-means model) and "music_generator.h5" (music generator weights).
-Due to the difficulty of finding stable, working libraries for the voice recording to use in GoogleColab, there might be difficulties in recording the initial audio. We suggest you to make it hear a recorded audio, or to speak very loud.
-Also the fluisynth library is sometimes faulty in reproducing the MIDI files, but they can be easily downloaded from the working directory for playback.
+Due to the difficulty of finding stable, working libraries for the voice recording to use in GoogleColab, there might be difficulties in recording the initial audio in midi format. We suggest you to make it hear a recorded audio, to speak very loud or in alternative to give it directly a classical music midi file.
 
 ## Deep Learning Models and Techniques
 - **Voice Recording/Music File**: initial input file the model will begin the output track with.
 - **Features Extractor**: face and emotion recognition given a picture of the user's face.
 - **Emotion Score**: Kmeans-based predictor trained to classify songs by emotion.
 - **LSTM Networks**: main part, predicts new notes according to the previous ones.
+- **FFNN**: positioned after lstm's output predict the most probable pitch step and duration of the next note.
 - **Emotion Encloser**: incorporates emotion score to predict the new note.
 - **List of Notes**: output list of notes.
 <p align="center">
