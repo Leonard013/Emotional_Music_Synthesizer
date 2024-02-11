@@ -13,7 +13,7 @@ The model has already been trained and it is possible to import the weights or s
 ## Quick Start
 To run the program it is necessary to run the colab notebook "Emotional_music_synthesizer.ipynb" in which step by step the whole generation process is illustrated. <br/>
 Before running the file it is required to add to colab's directory file "shape_predictor_68_face_landmarks.dat" (face feature descriptor), "model.pkl" (k-means model) and "music_generator.h5" (music generator weights).
-Due to the difficulty of finding stable, working libraries for the voice recording to use in GoogleColab, there might be difficulties in recording the initial audio. We suggest you to make it hear a recorded audio, or to speak very loud.
+Due to the difficulty of finding stable, working libraries for the voice recording to use in GoogleColab, there might be difficulties in recording the initial audio in midi format. We suggest you to make it hear a recorded audio, to speak very loud or in alternative to give it directly a midi file.
 Also the fluisynth library is sometimes faulty in reproducing the MIDI files, but they can be easily downloaded from the working directory for playback.
 
 ## Deep Learning Models and Techniques
