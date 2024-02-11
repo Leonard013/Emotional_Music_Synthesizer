@@ -21,6 +21,7 @@ Also the fluisynth library is sometimes faulty in reproducing the MIDI files, bu
 - **Features Extractor**: face and emotion recognition given a picture of the user's face.
 - **Emotion Score**: Kmeans-based predictor trained to classify songs by emotion.
 - **LSTM Networks**: main part, predicts new notes according to the previous ones.
+- **FFNN**: positioned after lstm's output predict the most probable pitch step and duration of the next note.
 - **Emotion Encloser**: incorporates emotion score to predict the new note.
 - **List of Notes**: output list of notes.
 <p align="center">
