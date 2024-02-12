@@ -8,7 +8,7 @@ The model begins by recording the listener's voice, which initiates the composit
 
 ## Dataset and Training
 The goal of the Music Generator project is to automate music composition, making it either accessible to individuals without formal musical training or as a helpful tool for more expert people. The system uses a collection of piano MIDI files from the [MAESTRO dataset](https://magenta.tensorflow.org/datasets/maestro) to train an LSTM model. This model learns the patterns and structures of musical compositions, enabling it to predict and generate new musical sequences.
-The model has already been trained and it is possible to import the weights or start a new training, surely with a longer training the model will perform better but due to our computational power limitations (and colab limited gpu load time) we had to reduce it. The training is done running 50 epochs for 500 music files.
+The model has already been trained and it is possible to import the weights or start a new training, surely with a longer training the model will perform better but due to our computational power limitations (and colab limited gpu load time) we had to reduce it. The training is done running 50 epochs for 100 music files.
 
 ## Quick Start
 To run the program it is necessary to run the colab notebook "Emotional_music_synthesizer.ipynb" in which step by step the whole generation process is illustrated. <br/>
