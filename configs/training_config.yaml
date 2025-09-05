@@ -1,0 +1,77 @@
+# Training Configuration for Whistle-to-Music Synthesizer
+
+# Model Configuration
+model:
+  vocab_size: 2000
+  d_model: 512
+  n_heads: 8
+  n_layers: 6
+  d_ff: 2048
+  max_seq_len: 1024
+  conditioning_dim: 16
+  dropout: 0.1
+  use_conditioning: true
+  use_musical_embedding: true
+
+# Training Configuration
+training:
+  learning_rate: 1e-4
+  batch_size: 8
+  num_epochs: 100
+  warmup_steps: 1000
+  max_grad_norm: 1.0
+  weight_decay: 0.01
+  gradient_accumulation_steps: 1
+  mixed_precision: true
+  early_stopping_patience: 10
+
+# Data Configuration
+data:
+  maestro_dir: "data/maestro"
+  cache_dir: "data/cache"
+  max_files_per_split:
+    train: null  # Use all files
+    validation: 50
+    test: 50
+  num_workers: 4
+  pin_memory: true
+
+# Logging Configuration
+logging:
+  use_wandb: false
+  wandb_project: "whistle-music-synthesizer"
+  log_every: 100
+  save_every: 10
+  eval_every: 5
+
+# Output Configuration
+output:
+  output_dir: "./outputs"
+  save_best_model: true
+  save_checkpoints: true
+
+# Device Configuration
+device: "auto"  # auto, cpu, cuda, mps
+
+# MIDI Processing Configuration
+midi_processing:
+  max_sequence_length: 1024
+  min_note: 21  # A0
+  max_note: 108  # C8
+  velocity_bins: 32
+  time_resolution: 0.125  # 1/8 note
+
+# Audio Processing Configuration
+audio_processing:
+  sample_rate: 22050
+  hop_length: 512
+  frame_length: 2048
+  n_mels: 128
+  fmin: 80.0
+  fmax: 2000.0
+
+# Feature Extraction Configuration
+feature_extraction:
+  pitch_smoothing_window: 5
+  rhythm_segment_length: 0.1
+  conditioning_vector_size: 16
