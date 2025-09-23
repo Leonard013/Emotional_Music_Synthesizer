@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data
+maestro/
+*.mid
+*.midi
+*.zip
+
+# Env
+.env
+.venv/
+
+# OS files
+.DS_Store
