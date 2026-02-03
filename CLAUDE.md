@@ -45,7 +45,7 @@ There are no separate Python source files — all code lives in the two Jupyter 
 3. **Emotion Detection** — Captures webcam photo, detects face via Haar Cascade, extracts 68 dlib landmarks, classifies smile (mouth aspect ratio < 0.2 → happy `+1`, else sad `-1`)
 4. **Note Extraction** — Parses MIDI into `(pitch, step, duration)` tuples
 5. **LSTM Generation** — Sliding window of 25 notes fed to LSTM; outputs next note predictions
-6. **Emotion Modulation** — Blends K-Means emotion scores with LSTM logits (α=0.65 emotion, β=0.35 model, temperature=2.0); adjusts step/duration via Gaussian sampling
+6. **Emotion Modulation** — Blends LSTM logits (α=0.65) with K-Means emotion scores (β=0.35), then divides by temperature (2.0); adjusts step/duration via Gaussian sampling
 7. **MIDI Synthesis** — Converts generated notes to MIDI file, synthesizes audio via FluidSynth → `output.mid`
 
 ### K-Means Training Workflow (`kmeans_clustering.ipynb`)
@@ -59,10 +59,10 @@ There are no separate Python source files — all code lives in the two Jupyter 
 
 ### LSTM Music Generator (`music_generator.h5`)
 - **Input**: `(batch, 25, 3)` — 25 notes × 3 features (pitch/step/duration)
-- **Architecture**: LSTM(128) → three heads: pitch Dense(128)+softmax, step Dense(1)+relu, duration Dense(1)+relu
+- **Architecture**: LSTM(128) → three heads: pitch Dense(128)+relu (logits, no softmax), step Dense(1)+relu, duration Dense(1)+relu
 - **Parameters**: 84,354
 - **Training**: 750 MAESTRO files, 50 epochs, batch_size=64, lr=0.005
-- **Losses**: pitch=sparse categorical cross-entropy (weight 0.05), step/duration=custom non-negative MSE (weight 1.0)
+- **Losses**: pitch=sparse categorical cross-entropy with `from_logits=True` (weight 0.05), step/duration=custom non-negative MSE (weight 1.0)
 - **Custom loss** (`non_negative_mse`): MSE + 10× penalty for negative predictions
 
 ### K-Means Emotion Classifier (`model.pkl`)
@@ -87,10 +87,14 @@ The LSTM generates one note at a time using a window of the previous 25 notes. A
 
 ### Emotion Score Blending
 ```python
-# Pitch logits combined from emotion and model
-logits = (0.65 * emotion_score + 0.35 * model_logits) / 2.0
+# In pitch_logits_emotion_encloser():
+logits = 0.65 * model_logits + 0.35 * emotion_score
+
+# Then in predict_next_note(), temperature is applied separately:
+pitch_logits /= temperature  # temperature = 2.0
+pitch = tf.random.categorical(pitch_logits, num_samples=1)
 ```
-Emotion score comes from softmax over K-Means cluster distances.
+Emotion score comes from `1 - softmax(K-Means cluster distances)` for the target emotion cluster.
 
 ## Key Hyperparameters
 
@@ -100,8 +104,8 @@ vocab_size = 128         # MIDI pitch range
 batch_size = 64
 learning_rate = 0.005
 epochs = 50
-alpha = 0.65             # Emotion weight in pitch blending
-beta = 0.35              # Model weight in pitch blending
+alpha = 0.65             # Model logits weight in pitch blending
+beta = 0.35              # Emotion score weight in pitch blending
 temperature = 2.0        # Softmax temperature for generation
 gamma_std = 0.12         # Step emotion modifier std
 delta_std = 0.15         # Duration emotion modifier std
@@ -123,8 +127,14 @@ num_predictions = 120    # Notes generated per song
 | `pitch_logits_emotion_encloser()` | Main notebook | Blends emotion score with LSTM logits |
 | `step_emotion_encloser()` | Main notebook | Samples emotion-based step modifier |
 | `duration_emotion_encloser()` | Main notebook | Samples emotion-based duration modifier |
+| `analyze_midi(notes_sequence)` | Main notebook | Extracts 9 statistical features from a note sequence |
+| `display_audio(pm)` | Main notebook | Synthesizes and plays MIDI via FluidSynth |
+| `plot_piano_roll(notes)` | Main notebook | Visualizes notes as a piano roll plot |
+| `take_photo(filename)` | Main notebook | Captures webcam photo for emotion detection |
 
 ## Development Notes
+
+- **MAESTRO version mismatch**: The main notebook downloads MAESTRO v2.0.0 for LSTM training, while the K-Means notebook uses MAESTRO v3.0.0. These are different dataset versions.
 
 - **Execution environment**: Google Colab is required due to webcam/microphone JavaScript integration and library compatibility.
 - **No tests**: There is no formal test suite. Validation is done through training loss plots and listening to generated audio.
