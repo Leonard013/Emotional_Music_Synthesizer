@@ -1,0 +1,16 @@
+tensorflow>=2.12
+keras
+pretty-midi
+pyfluidsynth
+pydub
+basic-pitch
+opencv-python
+dlib
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+seaborn
+plotly
+sounddevice

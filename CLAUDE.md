@@ -4,56 +4,106 @@
 
 Emotional Music Synthesizer is a deep learning research project that generates classical piano music responsive to a user's detected emotional state. It combines computer vision (facial emotion detection), audio processing (voice-to-MIDI), K-Means clustering, and LSTM neural networks to produce emotionally-guided MIDI compositions.
 
-Built by students at Sapienza University of Rome. Designed to run on **Google Colab**.
+Built by students at Sapienza University of Rome.
 
 ## Repository Structure
 
 ```
 Emotional_Music_Synthesizer/
-├── CLAUDE.md                                # This file
-├── Emotional_Music_Synthesizer.ipynb        # Main notebook — full pipeline
-├── kmeans_clustering.ipynb                  # K-Means emotion classifier training
+├── main.py                                  # Entry point — CLI for full pipeline
+├── config.py                                # All hyperparameters and paths
+├── midi_utils.py                            # MIDI parsing, note extraction, synthesis
+├── emotion_detection.py                     # Face detection, smile classification
+├── model.py                                 # LSTM model definition, custom loss, sequences
+├── emotion_modulation.py                    # K-Means emotion scoring, pitch/step/duration modulation
+├── generate.py                              # Note generation loop with emotion guidance
+├── train_lstm.py                            # Script to retrain LSTM on MAESTRO
+├── train_kmeans.py                          # Script to retrain K-Means classifier
+├── requirements.txt                         # Python dependencies
 ├── model.pkl                                # Pre-trained K-Means model (k=2)
 ├── music_generator.h5                       # Pre-trained LSTM music generator
 ├── shape_predictor_68_face_landmarks.dat    # dlib 68-point facial landmark detector (96 MB)
+├── Emotional_Music_Synthesizer.ipynb        # Original notebook (legacy, kept for reference)
+├── kmeans_clustering.ipynb                  # Original K-Means notebook (legacy, kept for reference)
 └── docs/
     ├── README.md                            # Project documentation
     └── model architecture.jpg               # System architecture diagram
 ```
-
-There are no separate Python source files — all code lives in the two Jupyter notebooks.
 
 ## Technology Stack
 
 | Category | Technologies |
 |----------|-------------|
 | ML/DL | TensorFlow/Keras, scikit-learn |
-| Audio/MIDI | pretty_midi, pydub, fluidsynth, basic-pitch |
+| Audio/MIDI | pretty_midi, pydub, fluidsynth, basic-pitch, sounddevice |
 | Computer Vision | OpenCV, dlib |
 | Data | NumPy, Pandas, SciPy |
 | Visualization | Matplotlib, Seaborn, Plotly |
-| Environment | Google Colab (Python 3.x, GPU) |
+| Environment | Python 3.x (local or Colab) |
 
-**No `requirements.txt` or build system exists.** All dependencies are installed inline via `!pip install` within the notebooks. The project is notebook-only with no packaging configuration.
+Install dependencies: `pip install -r requirements.txt`
+
+## Usage
+
+```bash
+# Full pipeline: record voice, detect emotion via webcam, generate music
+python main.py
+
+# Use pre-existing voice MIDI and specify emotion directly
+python main.py --voice_midi voice_basic_pitch.mid --emotion happy
+
+# Use a photo for emotion detection instead of webcam
+python main.py --voice_midi voice_basic_pitch.mid --photo photo.jpg
+
+# Adjust generation parameters
+python main.py --voice_midi voice_basic_pitch.mid --emotion sad --num_notes 200 --temperature 1.5
+
+# Retrain the LSTM model
+python train_lstm.py --epochs 50 --num_files 750
+
+# Retrain K-Means classifier
+python train_kmeans.py --maestro_dir /path/to/maestro-v3.0.0 --vgmidi_dir /path/to/vgmidi/unlabelled
+```
 
 ## End-to-End Pipeline
 
-### Main Workflow (`Emotional_Music_Synthesizer.ipynb`)
+### Generation Workflow (`main.py` → `generate.py`)
 
-1. **Voice Recording** — Records 10s of audio from browser microphone → `voice.wav`
-2. **Voice-to-MIDI** — Converts audio to MIDI using basic-pitch → `voice_basic_pitch.mid`
-3. **Emotion Detection** — Captures webcam photo, detects face via Haar Cascade, extracts 68 dlib landmarks, classifies smile (mouth aspect ratio < 0.2 → happy `+1`, else sad `-1`)
-4. **Note Extraction** — Parses MIDI into `(pitch, step, duration)` tuples
+1. **Voice Recording** — Records audio from microphone via `sounddevice` → `voice.wav`
+2. **Voice-to-MIDI** — Converts audio to MIDI using `basic-pitch` → `voice_basic_pitch.mid`
+3. **Emotion Detection** — Captures webcam photo (or uses provided photo/flag), detects face via dlib, classifies smile from mouth aspect ratio (< 0.2 → happy `+1`, else sad `-1`)
+4. **Note Extraction** — Parses voice MIDI into `(pitch, step, duration)` tuples
 5. **LSTM Generation** — Sliding window of 25 notes fed to LSTM; outputs next note predictions
 6. **Emotion Modulation** — Blends LSTM logits (α=0.65) with K-Means emotion scores (β=0.35), then divides by temperature (2.0); adjusts step/duration via Gaussian sampling
-7. **MIDI Synthesis** — Converts generated notes to MIDI file, synthesizes audio via FluidSynth → `output.mid`
+7. **MIDI Synthesis** — Converts generated notes to MIDI file → `output.mid`
 
-### K-Means Training Workflow (`kmeans_clustering.ipynb`)
+### K-Means Training Workflow (`train_kmeans.py`)
 
-1. Loads MAESTRO v3.0.0 (2890 files) + VGMIDI (906 files)
+1. Loads MIDI files from MAESTRO and optionally VGMIDI directories
 2. Extracts 9 features per file: avg/max/std of pitch, step, duration
 3. Trains K-Means with k=2 (happy/sad clusters)
 4. Saves model → `model.pkl`
+
+### LSTM Training Workflow (`train_lstm.py`)
+
+1. Downloads MAESTRO v2.0.0 if not present
+2. Extracts notes from MIDI files, builds sliding-window sequences
+3. Trains for 50 epochs with early stopping (patience=5)
+4. Saves model → `music_generator.h5`
+
+## Module Guide
+
+| File | Purpose |
+|------|---------|
+| `config.py` | All hyperparameters, paths, and constants in one place |
+| `midi_utils.py` | `midi_to_notes()`, `notes_to_midi()`, `analyze_midi()`, `analyze_midi_file()`, `display_audio()`, `plot_piano_roll()` |
+| `emotion_detection.py` | `is_smiling()`, `detect_emotion_from_image()`, `detect_emotion_from_webcam()` |
+| `model.py` | `build_model()`, `load_trained_model()`, `create_sequences()`, `non_negative_mse()` |
+| `emotion_modulation.py` | `emotion_classifier()`, `pitch_logits_emotion_encloser()`, `step_emotion_encloser()`, `duration_emotion_encloser()`, `load_kmeans_model()` |
+| `generate.py` | `predict_next_note()`, `generate_music()` |
+| `train_lstm.py` | CLI script for LSTM training |
+| `train_kmeans.py` | CLI script for K-Means training |
+| `main.py` | CLI entry point orchestrating the full pipeline |
 
 ## Models
 
@@ -98,60 +148,42 @@ Emotion score comes from `1 - softmax(K-Means cluster distances)` for the target
 
 ## Key Hyperparameters
 
-```
-seq_length = 25          # Sliding window size
-vocab_size = 128         # MIDI pitch range
-batch_size = 64
-learning_rate = 0.005
-epochs = 50
-alpha = 0.65             # Model logits weight in pitch blending
-beta = 0.35              # Emotion score weight in pitch blending
-temperature = 2.0        # Softmax temperature for generation
-gamma_std = 0.12         # Step emotion modifier std
-delta_std = 0.15         # Duration emotion modifier std
-num_predictions = 120    # Notes generated per song
-```
+All defined in `config.py`:
 
-## Important Functions
-
-| Function | Location | Purpose |
-|----------|----------|---------|
-| `record(sec)` | Main notebook | Records audio from browser microphone |
-| `is_smiling(landmarks)` | Main notebook | Classifies emotion from mouth aspect ratio |
-| `midi_to_notes(midi_file)` | Main notebook | Extracts pitch/step/duration from MIDI |
-| `notes_to_midi(notes)` | Main notebook | Converts note DataFrame back to MIDI |
-| `create_sequences()` | Main notebook | Builds sliding window training sequences |
-| `non_negative_mse()` | Main notebook | Custom loss penalizing negative predictions |
-| `predict_next_note()` | Main notebook | Generates next note with emotion modulation |
-| `emotion_classifier()` | Main notebook | K-Means emotion scoring |
-| `pitch_logits_emotion_encloser()` | Main notebook | Blends emotion score with LSTM logits |
-| `step_emotion_encloser()` | Main notebook | Samples emotion-based step modifier |
-| `duration_emotion_encloser()` | Main notebook | Samples emotion-based duration modifier |
-| `analyze_midi(notes_sequence)` | Main notebook | Extracts 9 statistical features from a note sequence |
-| `display_audio(pm)` | Main notebook | Synthesizes and plays MIDI via FluidSynth |
-| `plot_piano_roll(notes)` | Main notebook | Visualizes notes as a piano roll plot |
-| `take_photo(filename)` | Main notebook | Captures webcam photo for emotion detection |
+```
+SEQ_LENGTH = 25          # Sliding window size
+VOCAB_SIZE = 128         # MIDI pitch range
+BATCH_SIZE = 64
+LEARNING_RATE = 0.005
+EPOCHS = 50
+ALPHA = 0.65             # Model logits weight in pitch blending
+BETA = 0.35              # Emotion score weight in pitch blending
+TEMPERATURE = 2.0        # Softmax temperature for generation
+GAMMA_STD = 0.12         # Step emotion modifier std
+DELTA_STD = 0.15         # Duration emotion modifier std
+NUM_PREDICTIONS = 120    # Notes generated per song
+SMILE_THRESHOLD = 0.2    # Mouth aspect ratio threshold
+```
 
 ## Development Notes
 
-- **MAESTRO version mismatch**: The main notebook downloads MAESTRO v2.0.0 for LSTM training, while the K-Means notebook uses MAESTRO v3.0.0. These are different dataset versions.
-
-- **Execution environment**: Google Colab is required due to webcam/microphone JavaScript integration and library compatibility.
+- **MAESTRO version mismatch**: The LSTM training uses MAESTRO v2.0.0, while the original K-Means notebook trained on MAESTRO v3.0.0. The `train_kmeans.py` script accepts any directory path.
 - **No tests**: There is no formal test suite. Validation is done through training loss plots and listening to generated audio.
 - **No CI/CD**: No automated pipelines.
-- **Retraining is optional**: Pre-trained model files (`model.pkl`, `music_generator.h5`) are committed. The LSTM training cells are effectively skipped during normal use.
+- **Retraining is optional**: Pre-trained model files (`model.pkl`, `music_generator.h5`) are committed and used by default.
 - **Large binary**: `shape_predictor_68_face_landmarks.dat` is 96 MB. It is a standard dlib asset and should not be modified.
-- **MAESTRO dataset**: Not included in the repo; downloaded at runtime from Google's storage (~5 GB).
+- **MAESTRO dataset**: Not included in the repo; downloaded at runtime by `train_lstm.py`.
+- **Original notebooks**: The `.ipynb` files are kept for reference but the `.py` files are the primary codebase.
 
 ## Conventions for AI Assistants
 
-1. **All code lives in notebooks** — edits should target `.ipynb` cells, not standalone `.py` files, unless restructuring is explicitly requested.
-2. **Preserve notebook cell structure** — the notebooks are designed to run top-to-bottom sequentially. Avoid reordering cells.
-3. **Hyperparameters are inline** — there is no config file. All tunable values are set directly in notebook cells.
-4. **Binary model files** — do not regenerate or modify `model.pkl`, `music_generator.h5`, or `shape_predictor_68_face_landmarks.dat` unless the user specifically requests retraining.
-5. **Emotion is binary** — the system uses only two emotion classes (happy/sad). Expanding this requires changes to both the K-Means model and the generation logic.
-6. **Custom loss must be registered** — when loading `music_generator.h5`, pass `custom_objects={'mse_with_positive_pressure': non_negative_mse}` to `load_model()`.
-7. **No dependency management** — if adding new libraries, add `!pip install` commands in the appropriate notebook cells.
+1. **Edit `.py` files** — all logic lives in the Python modules. The notebooks are legacy reference only.
+2. **Hyperparameters live in `config.py`** — do not scatter magic numbers across modules.
+3. **Binary model files** — do not regenerate or modify `model.pkl`, `music_generator.h5`, or `shape_predictor_68_face_landmarks.dat` unless the user specifically requests retraining.
+4. **Emotion is binary** — the system uses only two emotion classes (happy/sad). Expanding this requires changes to both the K-Means model and the generation logic.
+5. **Custom loss must be registered** — when loading `music_generator.h5`, use `model.load_trained_model()` which handles the custom objects mapping.
+6. **Import from config** — all constants should be imported from `config.py`, not redefined locally.
+7. **Dependencies** — if adding new libraries, add them to `requirements.txt`.
 
 ## References
 
