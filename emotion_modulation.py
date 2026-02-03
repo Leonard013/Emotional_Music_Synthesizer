@@ -60,11 +60,11 @@ def pitch_logits_emotion_encloser(
 
 def step_emotion_encloser() -> float:
     """Sample a Gaussian modifier for step adjustment."""
-    gamma = abs(1 - np.random.normal(GAMMA_MEAN, GAMMA_STD, 1))
-    return gamma
+    gamma = abs(1 - np.random.normal(GAMMA_MEAN, GAMMA_STD))
+    return float(gamma)
 
 
 def duration_emotion_encloser() -> float:
     """Sample a Gaussian modifier for duration adjustment."""
-    delta = abs(1 - np.random.normal(DELTA_MEAN, DELTA_STD, 1))
-    return delta
+    delta = abs(1 - np.random.normal(DELTA_MEAN, DELTA_STD))
+    return float(delta)

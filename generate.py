@@ -49,9 +49,9 @@ def predict_next_note(pitches, notes, model, temperature, label, kmeans_model):
     pitch_logits /= temperature
 
     pitch = tf.random.categorical(pitch_logits, num_samples=1)
-    pitch = tf.squeeze(pitch, axis=-1)
-    duration = tf.squeeze(duration, axis=-1)
-    step = tf.squeeze(step, axis=-1)
+    pitch = tf.squeeze(pitch)
+    duration = tf.squeeze(duration)
+    step = tf.squeeze(step)
 
     step = tf.maximum(0, step)
     duration = tf.maximum(0, duration)

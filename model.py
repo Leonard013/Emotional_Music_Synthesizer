@@ -43,13 +43,24 @@ def build_model() -> tf.keras.Model:
 
 
 def load_trained_model(model_path: str) -> tf.keras.Model:
-    """Load a previously trained model from an .h5 file."""
-    from keras.models import load_model
+    """Load a previously trained model from an .h5 file.
 
-    return load_model(
-        model_path,
-        custom_objects={"mse_with_positive_pressure": non_negative_mse},
-    )
+    Handles both Keras 2 and Keras 3 .h5 formats. If direct loading
+    fails (e.g. Keras 2 model on Keras 3), falls back to building a
+    fresh model and loading weights only.
+    """
+    try:
+        from keras.models import load_model
+
+        return load_model(
+            model_path,
+            custom_objects={"mse_with_positive_pressure": non_negative_mse},
+        )
+    except (ValueError, TypeError):
+        # Keras 2 .h5 file on Keras 3: build model and load weights
+        model = build_model()
+        model.load_weights(model_path)
+        return model
 
 
 def create_sequences(dataset: tf.data.Dataset, seq_length: int, vocab_size: int = VOCAB_SIZE) -> tf.data.Dataset:
